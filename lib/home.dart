@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:spellingquizapp/main.dart';
+import 'package:spellingquizapp/splash.dart';
 
 class SpellingQuiz {
   var questions = [
@@ -41,7 +44,7 @@ class SpellingQuiz {
   ];
 }
 
-var finalScore = 0;
+var finalScore = 4;
 var questionNumber = 0;
 var quiz = SpellingQuiz();
 
@@ -55,8 +58,29 @@ class homepage extends StatefulWidget {
 class homepageState extends State<homepage> {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () {
+        return showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                  title: Text(
+                    "Spelling Quiz",
+                  ),
+                  content: Text("You can't go back at this stage."),
+                  actions: <Widget>[
+                    FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        "Ok",
+                      ),
+                    )
+                  ],
+                ));
+      },
       child: Scaffold(
         body: Container(
           margin: const EdgeInsets.all(10.0),
@@ -75,7 +99,11 @@ class homepageState extends State<homepage> {
                     ),
                     Text(
                       "Score: $finalScore",
-                      style: TextStyle(fontSize: 22.0),
+                      style: TextStyle(
+                        fontSize: 22.0,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: "New Times Roman",
+                      ),
                     )
                   ],
                 ),
@@ -93,12 +121,17 @@ class homepageState extends State<homepage> {
                 children: <Widget>[
                   MaterialButton(
                     minWidth: 120.0,
-                    color: Colors.green,
+                    height: 45.0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0)),
+                    color: Colors.indigo,
+                    splashColor: Colors.green,
+                    highlightColor: Colors.green,
                     onPressed: () {
                       if (quiz.choices[questionNumber][0] ==
                           quiz.correctAnswers[questionNumber]) {
                         debugPrint("Excellent");
-                        finalScore++;
+                        finalScore = finalScore + 4;
                       } else {
                         debugPrint("Incorrect, try again");
                       }
@@ -111,7 +144,12 @@ class homepageState extends State<homepage> {
                   ),
                   MaterialButton(
                     minWidth: 120.0,
-                    color: Colors.green,
+                    height: 45.0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0)),
+                    color: Colors.indigo,
+                    splashColor: Colors.green,
+                    highlightColor: Colors.green,
                     onPressed: () {
                       if (quiz.choices[questionNumber][1] ==
                           quiz.correctAnswers[questionNumber]) {
@@ -135,7 +173,12 @@ class homepageState extends State<homepage> {
                 children: <Widget>[
                   MaterialButton(
                     minWidth: 120.0,
-                    color: Colors.green,
+                    height: 45.0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0)),
+                    color: Colors.indigo,
+                    splashColor: Colors.green,
+                    highlightColor: Colors.green,
                     onPressed: () {
                       if (quiz.choices[questionNumber][2] ==
                           quiz.correctAnswers[questionNumber]) {
@@ -153,7 +196,12 @@ class homepageState extends State<homepage> {
                   ),
                   MaterialButton(
                     minWidth: 120.0,
-                    color: Colors.green,
+                    height: 45.0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0)),
+                    color: Colors.indigo,
+                    splashColor: Colors.green,
+                    highlightColor: Colors.green,
                     onPressed: () {
                       if (quiz.choices[questionNumber][3] ==
                           quiz.correctAnswers[questionNumber]) {
@@ -219,34 +267,38 @@ class Summary extends StatelessWidget {
   Summary({Key key, @required this.score}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: Scaffold(
-        body: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                "Final Score: $score",
-                style: TextStyle(
-                  fontSize: 25.0,
-                ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Result",
+        ),
+      ),
+      body: Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              "Congratulations. You scored: $score",
+              style: TextStyle(
+                fontSize: 25.0,
               ),
-              Padding(padding: EdgeInsets.all(10.0)),
-              MaterialButton(
-                color: Colors.deepOrange,
-                onPressed: () {
-                  questionNumber = 0;
-                  finalScore = 0;
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  "Reset Quiz",
-                  style: TextStyle(fontSize: 20.0, color: Colors.white),
-                ),
-              )
-            ],
-          ),
+            ),
+            Padding(padding: EdgeInsets.all(10.0)),
+            MaterialButton(
+              color: Colors.deepOrange,
+              onPressed: () {
+                questionNumber = 0;
+                finalScore = 0;
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => splashscreen(),
+                ));
+              },
+              child: Text(
+                "Reset Quiz",
+                style: TextStyle(fontSize: 20.0, color: Colors.white),
+              ),
+            )
+          ],
         ),
       ),
     );

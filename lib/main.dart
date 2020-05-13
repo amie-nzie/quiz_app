@@ -14,27 +14,3 @@ class MyApp extends StatelessWidget {
         home: splashscreen());
   }
 }
-
-class nextScreen extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return new nextScreenState();
-  }
-}
-
-class nextScreenState extends State<nextScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: RaisedButton(
-          onPressed: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => homepage()));
-          },
-          child: Text("Begin Quiz"),
-        ),
-      ),
-    );
-  }
-}
